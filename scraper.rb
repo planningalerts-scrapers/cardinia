@@ -7,7 +7,7 @@ def scrape_page(page, comment_url)
   table = page.at("table")
 
   table.search("tr")[1..-1].each do |tr|
-    day, month, year = tr.search("td")[3].inner_text.split(" ")
+    day, month, year = tr.search("td")[3].inner_text.gsub(/[[:space:]]/, ' ').split(" ")
     month_i = Date::MONTHNAMES.index(month)
 
     record = {
