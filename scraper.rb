@@ -32,7 +32,7 @@ def scrape_page(page, comment_url)
 end
 
 url = "https://www.cardinia.vic.gov.au/advertisedplanningapplications"
-comment_url = "mail@cardinia.vic.gov.au"
+comment_url = "mailto:mail@cardinia.vic.gov.au"
 page = agent.get(url)
 puts "Scraping page..."
 scrape_page(page, comment_url)
