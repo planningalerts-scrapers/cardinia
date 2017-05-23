@@ -31,6 +31,15 @@ def scrape_page(page, comment_url)
   end
 end
 
+
+# Change the comment url of existing records that aren't valid urls for PlanningAlerts
+# See https://github.com/planningalerts-scrapers/cardinia/pull/2#issuecomment-303275495
+ScraperWiki.select("* from data where `comment_url`='mail@cardinia.vic.gov.au'").each do |record|
+  p "changing record #{record["council_reference"]} comment_url to mailto:mail@cardinia.vic.gov.au"
+  record["comment_url"] = "mailto:mail@cardinia.vic.gov.au"
+  ScraperWiki.save_sqlite(['council_reference'], record)
+end
+
 url = "https://www.cardinia.vic.gov.au/advertisedplanningapplications"
 comment_url = "mailto:mail@cardinia.vic.gov.au"
 page = agent.get(url)
