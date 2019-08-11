@@ -1,4 +1,4 @@
-require 'scraperwiki'
+#require 'scraperwiki'
 require 'mechanize'
 
 agent = Mechanize.new
@@ -30,9 +30,10 @@ def scrape_page(page, comment_url)
       "date_scraped" => Date.today.to_s
     }
 
-    puts "Saving record " + record['council_reference'] + ", " + record['address']
+    puts "Saving record " + record['council_reference'] + ", " + record['address'] + ", " + record['on_notice_to'] + ", " + record['description']
+    #puts "Saving record " + record['council_reference'] + ", " + record['address']
 #      puts record
-    ScraperWiki.save_sqlite(['council_reference'], record)
+    #ScraperWiki.save_sqlite(['council_reference'], record)
   end
 end
 
