@@ -4,9 +4,6 @@ require 'mechanize'
 agent = Mechanize.new
 
 def scrape_page(page, comment_url)
-  special = "?<>',?[]}{=-)(*&^%$#`~{}"
-  regex = /[#{special.gsub(/./){|char| "\\#{char}"}}]/
-
   table = page.at("table")
 
   table.search("tr")[1..-1].each do |tr|
@@ -27,7 +24,7 @@ def scrape_page(page, comment_url)
 
     puts "Saving record " + record['council_reference'] + ", " + record['address']
 #      puts record
-    #ScraperWiki.save_sqlite(['council_reference'], record)
+    ScraperWiki.save_sqlite(['council_reference'], record)
   end
 end
 
