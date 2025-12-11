@@ -21,7 +21,7 @@ def scrape_page(page)
       "council_reference" => tr.search("td")[0].inner_text.strip,
       "description" => tr.search("td")[1].inner_text.strip,
       "address" => tr.search("td")[2].inner_text.strip + ", VIC",
-      "on_notice_to" => (Date.new(year.to_i, month_i, day.to_i).to_s if day && month && year),
+      "on_notice_to" => (Date.new(year.to_i, month_i, day.to_i).to_s if day && month_i && year),
       "date_scraped" => Date.today.to_s
     }
 
