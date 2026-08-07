@@ -2,6 +2,10 @@ require "scraperwiki"
 require "mechanize"
 
 agent = Mechanize.new
+# On morph.io set the environment variable MORPH_AUSTRALIAN_PROXY to
+# http://morph:password@au.proxy.oaf.org.au:8888 replacing password with
+# the real password.
+agent.agent.set_proxy(ENV["MORPH_AUSTRALIAN_PROXY"]) if ENV["MORPH_AUSTRALIAN_PROXY"]
 
 def scrape_page(page)
   table = page.at("table")
