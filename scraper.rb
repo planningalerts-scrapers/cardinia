@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "scraperwiki"
 require "mechanize"
 
@@ -10,7 +12,7 @@ agent.agent.set_proxy(ENV["MORPH_AUSTRALIAN_PROXY"]) if ENV["MORPH_AUSTRALIAN_PR
 def scrape_page(page)
   table = page.at("table")
 
-  table.search("tr")[1..-1].each do |tr|
+  table.search("tr")[1..].each do |tr|
     day, month, year = tr.search("td")[3].inner_text.gsub(/[[:space:]]/, " ").split(" ")
     month_i = Date::MONTHNAMES.index(month)
 
@@ -24,12 +26,12 @@ def scrape_page(page)
       "info_url" => link.attributes["href"].to_s,
       "council_reference" => tr.search("td")[0].inner_text.strip,
       "description" => tr.search("td")[1].inner_text.strip,
-      "address" => tr.search("td")[2].inner_text.strip + ", VIC",
+      "address" => "#{tr.search('td')[2].inner_text.strip}, VIC",
       "on_notice_to" => (Date.new(year.to_i, month_i, day.to_i).to_s if day && month_i && year),
       "date_scraped" => Date.today.to_s,
     }
 
-    puts "Saving record " + record["council_reference"] + ", " + record["address"]
+    puts "Saving record #{record['council_reference']}, #{record['address']}"
     #      puts record
     ScraperWiki.save_sqlite(["council_reference"], record)
   end
