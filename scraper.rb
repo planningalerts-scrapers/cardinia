@@ -9,7 +9,11 @@ agent = Mechanize.new
 # On morph.io set the environment variable MORPH_AUSTRALIAN_PROXY to
 # http://morph:password@au.proxy.oaf.org.au:8888 replacing password with
 # the real password.
-agent.agent.set_proxy(ENV["MORPH_AUSTRALIAN_PROXY"]) if ENV["MORPH_AUSTRALIAN_PROXY"]
+proxy = ENV["MORPH_AUSTRALIAN_PROXY"]
+if proxy
+  agent.agent.set_proxy(proxy)
+  puts "Using Australian proxy: #{proxy.sub(%r{[^/]*@}, '***@')}"
+end
 agent.user_agent = "Ruby/#{RUBY_VERSION} PlanningAlerts scraper for Cardinia Shire Council/#{VERSION} (https://www.planningalerts.org.au/about)"
 puts "Using user agent: #{agent.user_agent}"
 
