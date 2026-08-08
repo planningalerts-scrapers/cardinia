@@ -19,8 +19,10 @@ end
 agent.user_agent = "Ruby/#{RUBY_VERSION} PlanningAlerts scraper for Cardinia Shire Council/#{VERSION} (https://www.planningalerts.org.au/about)"
 puts "Using user agent: #{agent.user_agent}"
 
+
 def scrape_page(page)
   table = page.at("table")
+  saved = 0
 
   table.search("tr")[1..].each do |tr|
     day, month, year = tr.search("td")[3].inner_text.gsub(/[[:space:]]/, " ").split(" ")
@@ -39,8 +41,7 @@ def scrape_page(page)
        path = info_url.gsub(%r{[^/\w\-.,()%]}) { |c| URI::DEFAULT_PARSER.escape(c) }
        info_url = "https://www.cardinia.vic.gov.au#{path}"
     else
-       puts "Reference: #{council_reference} has invalid url (#{info_url}), using list url instead!"
-       puts "Using list url instead of invalid: #{info_url.inspect} for reference: #{council_reference}"
+       puts "NOTE: Reference: #{council_reference} had an invalid url (#{info_url}), using list url instead!"
        info_url = ADVERTISED_APPLICATIONS_URL
     end
 
@@ -56,9 +57,14 @@ def scrape_page(page)
     puts "Saving record #{record['council_reference']}, #{record['address']}"
     #      puts record
     ScraperWiki.save_sqlite(["council_reference"], record)
+    saved += 1
   end
+  saved
 end
 
 page = agent.get(ADVERTISED_APPLICATIONS_URL)
 puts "Scraping page: #{ADVERTISED_APPLICATIONS_URL}"
-scrape_page(page)
+saved = scrape_page(page)
+
+puts "Finished! Saved #{saved} applications."
+
