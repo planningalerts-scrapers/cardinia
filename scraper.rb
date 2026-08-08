@@ -5,6 +5,8 @@ require "mechanize"
 
 VERSION = "1.0"
 
+ADVERTISED_APPLICATIONS_URL = "https://www.cardinia.vic.gov.au/planning-and-building/applying-and-managing-planning-applications-and-permits/current-advertised"
+
 agent = Mechanize.new
 # On morph.io set the environment variable MORPH_AUSTRALIAN_PROXY to
 # http://morph:password@au.proxy.oaf.org.au:8888 replacing password with
@@ -30,9 +32,21 @@ def scrape_page(page)
       next
     end
 
+    council_reference = tr.search("td")[0].inner_text.strip
+    info_url = link.attributes["href"]&.to_s
+    if info_url&.start_with?('/') && info_url.end_with?('.pdf')
+       # Percent encode everything that is not a valid url path
+       path = info_url.gsub(%r{[^/\w\-.,()%]}) { |c| URI::DEFAULT_PARSER.escape(c) }
+       info_url = "https://www.cardinia.vic.gov.au#{path}"
+    else
+       puts "Reference: #{council_reference} has invalid url (#{info_url}), using list url instead!"
+       puts "Using list url instead of invalid: #{info_url.inspect} for reference: #{council_reference}"
+       info_url = ADVERTISED_APPLICATIONS_URL
+    end
+
     record = {
-      "info_url" => link.attributes["href"].to_s,
-      "council_reference" => tr.search("td")[0].inner_text.strip,
+      "info_url" => info_url.to_s,
+      "council_reference" => council_reference,
       "description" => tr.search("td")[1].inner_text.strip,
       "address" => "#{tr.search('td')[2].inner_text.strip}, VIC",
       "on_notice_to" => (Date.new(year.to_i, month_i, day.to_i).to_s if day && month_i && year),
@@ -45,7 +59,6 @@ def scrape_page(page)
   end
 end
 
-url = "https://www.cardinia.vic.gov.au/advertisedplanningapplications"
-page = agent.get(url)
-puts "Scraping page..."
+page = agent.get(ADVERTISED_APPLICATIONS_URL)
+puts "Scraping page: #{ADVERTISED_APPLICATIONS_URL}"
 scrape_page(page)
