@@ -109,12 +109,12 @@ GEM
       simplecov
       terminal-table
     simplecov-html (0.13.2)
-    sqlite3 (2.2.0-aarch64-linux-gnu)
-    sqlite3 (2.2.0-arm-linux-gnu)
-    sqlite3 (2.2.0-arm64-darwin)
-    sqlite3 (2.2.0-x86-linux-gnu)
-    sqlite3 (2.2.0-x86_64-darwin)
-    sqlite3 (2.2.0-x86_64-linux-gnu)
+    sqlite3 (2.9.5-aarch64-linux-gnu)
+    sqlite3 (2.9.5-arm-linux-gnu)
+    sqlite3 (2.9.5-arm64-darwin)
+    sqlite3 (2.9.5-x86-linux-gnu)
+    sqlite3 (2.9.5-x86_64-darwin)
+    sqlite3 (2.9.5-x86_64-linux-gnu)
     sqlite_magic (0.0.6)
       sqlite3
     terminal-table (4.0.0)
@@ -142,7 +142,7 @@ DEPENDENCIES
   scraperwiki!
   simplecov (~> 0.18.0)
   simplecov-console
-  sqlite3 (~> 2.2.0)
+  sqlite3 (~> 2.9.5)
 
 RUBY VERSION
    ruby 3.2.2p53
